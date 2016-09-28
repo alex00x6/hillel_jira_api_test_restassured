@@ -116,6 +116,9 @@ public class MyTest {
 
     @Test
     public void DeleteIssue(){
+        if(created_issue==null){
+            CreateIssue();
+        }
         given()
                 .contentType("application/json")
                 .cookie(cookie_jsession)
@@ -124,6 +127,7 @@ public class MyTest {
                 .assertThat()
                 .statusCode(204);
         System.out.println("issue "+created_issue+" was deleted");
+
     }
 
     @Test
