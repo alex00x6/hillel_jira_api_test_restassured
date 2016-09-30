@@ -1,8 +1,16 @@
+import com.sun.org.apache.xerces.internal.xs.StringList;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class PropertiesInput {
 
@@ -41,4 +49,26 @@ public class PropertiesInput {
 
         return credentials;
     }
+
+    public List<String> readListOfIssuesToDelete(){
+        List<String> listOfIssuesToDelete = null;
+
+            String file = "issuesToDelete.properties";
+
+        try {
+            listOfIssuesToDelete = Files.lines(Paths.get(file)).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for(int i = 0; i < listOfIssuesToDelete.size(); i++){
+        System.out.println(listOfIssuesToDelete.get(i));
+        }
+
+
+        return listOfIssuesToDelete;
+
+
+    }
+
 }

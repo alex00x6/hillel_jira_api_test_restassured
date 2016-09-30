@@ -5,6 +5,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.testng.Assert.assertFalse;
@@ -12,8 +13,11 @@ import static org.testng.Assert.assertTrue;
 
 public class MyTest {
 
+
     private String cookie_jsession, issue_key, comment_id, comment_text, created_issue, created_comment;
     private String login, password_right, password_wrong, issue_type, summary_text;
+
+    PropertiesInput properties = new PropertiesInput();
 
     int Login(String login, String password){
 
@@ -39,7 +43,6 @@ public class MyTest {
         RestAssured.baseURI = "http://soft.it-hillel.com.ua";
         RestAssured.port = 8080;
 
-        PropertiesInput properties = new PropertiesInput();
         HashMap<String, String> content = properties.readProperties();
 
         issue_key = content.get("issue_key");
@@ -60,7 +63,7 @@ public class MyTest {
         summary_text = "Changing summary via restassured";
 
         login = "alex00x6";
-        password_right = "652113";
+        password_right = "nuhz";
         password_wrong = "figvama";
         */
 
@@ -109,7 +112,7 @@ public class MyTest {
                     .cookie(cookie_jsession)
                     .body(createIssueBody)
                     .post("/rest/api/2/issue")
-                    .then().assertThat().statusCode(201).extract().path("key");
+                    .then().log().all().assertThat().statusCode(201).extract().path("key");
         System.out.println("created issue: "+created_issue);
 
     }
@@ -123,7 +126,7 @@ public class MyTest {
                 .contentType("application/json")
                 .cookie(cookie_jsession)
                 .delete("/rest/api/2/issue/"+created_issue)
-                .then()
+                .then().log().all()
                 .assertThat()
                 .statusCode(204);
         System.out.println("issue "+created_issue+" was deleted");
@@ -135,9 +138,9 @@ public class MyTest {
 
         given()
                 .contentType("application/json")
-                .cookie(cookie_jsession)
+                .cookie(cookie_jsession).log().all()
                 .get("/rest/api/2/issue/"+issue_key)
-                .then()
+                .then().log().all()
                 .assertThat()
                 .statusCode(200);
 
@@ -160,6 +163,9 @@ public class MyTest {
     @Test
     public void DeleteCommentFromIssue(){
         System.out.println("============= Delete comment =============");
+        if(created_comment==null)
+            AddCommentToIssue();
+
         given()
                 .contentType("application/json")
                 .cookie(cookie_jsession)
@@ -202,10 +208,27 @@ public class MyTest {
                 "        \"status\",\n" +
                 "        \"assignee\"\n" +
                 "    ]\n" +
-                "}").post("/rest/api/2/search");
+                "}").log().all().post("/rest/api/2/search");
 
         assertTrue(response.getStatusCode()==200);
         assertTrue(response.getBody().asString().contains("total"));
+
+    }
+
+    @Test
+    public void deleteIssuesByIteration(){
+        List<String> issues = properties.readListOfIssuesToDelete();
+        for(int i = 0; i<issues.size(); i++){
+        given()
+                .contentType("application/json")
+                .cookie(cookie_jsession)
+                .delete("/rest/api/2/issue/"+issues.get(i))
+                .then().log().all()
+                .assertThat()
+                .statusCode(204);
+        System.out.println("issue "+issues.get(i)+" was deleted");
+        }
+
 
     }
 
@@ -215,7 +238,6 @@ public class MyTest {
             System.out.println("created issue: "+created_issue);
         if (created_comment!=null)
             System.out.println("created comment id: "+created_comment+" to issue: "+issue_key);
-
 
     }
 
