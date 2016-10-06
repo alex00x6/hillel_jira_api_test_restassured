@@ -55,19 +55,6 @@ public class MyTest {
         password_right = content.get("password_right");
         password_wrong = content.get("password_wrong");
 
-        /*
-        issue_key = "qaaut-38";
-        comment_id = "10966";
-        issue_type = "10001";
-        comment_text = "Comment added via restassured";
-        summary_text = "Changing summary via restassured";
-
-        login = "alex00x6";
-        password_right = "nuhz";
-        password_wrong = "figvama";
-        */
-
-
         Login(login, password_right);
 
     }
@@ -215,7 +202,7 @@ public class MyTest {
 
     }
 
-    @Test
+    //@Test
     public void deleteIssuesByIteration(){
         List<String> issues = properties.readListOfIssuesToDelete();
         for(int i = 0; i<issues.size(); i++){
