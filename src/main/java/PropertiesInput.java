@@ -17,7 +17,7 @@ public class PropertiesInput {
     Properties prop = new Properties();
     InputStream input = null;
 
-    public HashMap<String, String> readProperties() {
+    public  HashMap<String, String> readProperties() {
         HashMap<String, String> credentials = new HashMap<>();
 
         try {
@@ -35,6 +35,9 @@ public class PropertiesInput {
             credentials.put("login", prop.getProperty("login"));
             credentials.put("password_right", prop.getProperty("password_right"));
             credentials.put("password_wrong", prop.getProperty("password_wrong"));
+            credentials.put("project_id", prop.getProperty("project_id"));
+            credentials.put("reporter_name", prop.getProperty("reporter_name"));
+            credentials.put("assignee_name", prop.getProperty("assignee_name"));
         } catch (IOException io) {
             io.printStackTrace();
         } finally {

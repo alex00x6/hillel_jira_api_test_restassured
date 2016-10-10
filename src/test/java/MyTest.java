@@ -14,20 +14,23 @@ import static org.testng.Assert.assertTrue;
 public class MyTest {
 
 
-    private String cookie_jsession, issue_key, comment_id, comment_text, created_issue, created_comment;
-    private String login, password_right, password_wrong, issue_type, summary_text;
+    private String cookie_jsession;
+    private String issue_key;
+    private String created_issue;
+    private String created_comment;
+    private String login;
+    private String password_right;
+    private String password_wrong;
 
     PropertiesInput properties = new PropertiesInput();
+    GenerateJSON generateJSON = new GenerateJSON();
 
     int Login(String login, String password){
 
         Response response = given()
                 .contentType("application/json")
-                .body("{\n" +
-                        "    \"username\": \""+login+"\",\n" +
-                        "    \"password\": \""+password+"\"\n" +
-                        "}")
-                .post("/rest/auth/1/session");
+                .body(generateJSON.Login())
+                .post(ApiUrls.LOGIN.getUri());
 
         cookie_jsession = "JSESSIONID="+response.getCookie("JSESSIONID");
         int status = response.getStatusCode();
@@ -46,10 +49,6 @@ public class MyTest {
         HashMap<String, String> content = properties.readProperties();
 
         issue_key = content.get("issue_key");
-        comment_id = content.get("comment_id");
-        issue_type = content.get("issue_type");
-        comment_text = content.get("comment_text");
-        summary_text = content.get("summary_text");
 
         login = content.get("login");
         password_right = content.get("password_right");
@@ -75,30 +74,12 @@ public class MyTest {
     @Test
     public void CreateIssue(){
 
-        String createIssueBody = "{\n" +
-                "\n" +
-                "\t\"fields\": {\n" +
-                "\t\t\"project\": {\n" +
-                "\t\t\t\"id\": \"10315\"\n" +
-                "\t\t},\n" +
-                "\t\t\"summary\": \"creating test issue via restassured\",\n" +
-                "\t\t\"issuetype\": {\n" +
-                "\t\t\t\"id\": \"10004\"\n" +
-                "\t\t},\n" +
-                "\t\t\"assignee\": {\n" +
-                "\t\t\t\"name\": \"alex00x6\"\n" +
-                "\t\t},\n" +
-                "\t\t\"reporter\": {\n" +
-                "\t\t\t\"name\": \"alex00x6\"\n" +
-                "\t\t}\n" +
-                "\t}\n" +
-                "}\n";
-
             created_issue = given()
                     .contentType("application/json")
                     .cookie(cookie_jsession)
-                    .body(createIssueBody)
-                    .post("/rest/api/2/issue")
+                    .body(generateJSON.CreateIssue())
+                    .log().all()
+                    .post(ApiUrls.ISSUE.getUri())
                     .then().log().all().assertThat().statusCode(201).extract().path("key");
         System.out.println("created issue: "+created_issue);
 
@@ -126,7 +107,7 @@ public class MyTest {
         given()
                 .contentType("application/json")
                 .cookie(cookie_jsession).log().all()
-                .get("/rest/api/2/issue/"+issue_key)
+                .get(ApiUrls.ISSUE.getUri(issue_key))
                 .then().log().all()
                 .assertThat()
                 .statusCode(200);
@@ -139,7 +120,7 @@ public class MyTest {
         created_comment = given()
                 .contentType("application/json")
                 .cookie(cookie_jsession)
-                .body("{ \"body\": \""+comment_text+"\"}")
+                .body(generateJSON.AddCommentToIssue())
                 .post("/rest/api/2/issue/"+issue_key+"/comment")
                 .then()
                 .assertThat()
@@ -168,8 +149,8 @@ public class MyTest {
         given()
                 .contentType("application/json")
                 .cookie(cookie_jsession)
-                .body("{\"fields\": \t{\"issuetype\": {\"id\": \""+issue_type+"\"}}}")
-                .put("/rest/api/2/issue/"+issue_key)
+                .body(generateJSON.ChangeTypeOfIssue())
+                .put(ApiUrls.ISSUE.getUri(issue_key))
                 .then()
                 .assertThat()
                 .statusCode(204);
@@ -177,25 +158,21 @@ public class MyTest {
 
     @Test
     public void ChangeSummaryOfIssue(){
-        given().contentType("application/json").cookie(cookie_jsession).body("{\n" +
-                "\t\"update\":{\n" +
-                "\t\t\"summary\":[{\"set\":\""+summary_text+"\"}]\n" +
-                "\t}\n" +
-                "}\n").put("/rest/api/2/issue/"+issue_key).then().statusCode(204);
+        given().contentType("application/json").cookie(cookie_jsession)
+                .body(generateJSON.ChangeSummaryOfIssue())
+                .put(ApiUrls.ISSUE.getUri(issue_key)).then().statusCode(204);
     }
 
     @Test
     public void SearchForIssue(){
-        Response response = given().contentType("application/json").cookie(cookie_jsession).body("{\n" +
-                "    \"jql\": \"project = QAAUT\",\n" +
-                "    \"startAt\": 0,\n" +
-                "    \"maxResults\": 15,\n" +
-                "    \"fields\": [\n" +
-                "        \"summary\",\n" +
-                "        \"status\",\n" +
-                "        \"assignee\"\n" +
-                "    ]\n" +
-                "}").log().all().post("/rest/api/2/search");
+        Response response = given()
+                .contentType("application/json")
+                .cookie(cookie_jsession)
+                .body(generateJSON.Search())
+                .log().all()
+                .post(ApiUrls.SEARCH.getUri());
+
+        System.out.println(response.asString());
 
         assertTrue(response.getStatusCode()==200);
         assertTrue(response.getBody().asString().contains("total"));
