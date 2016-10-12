@@ -1,12 +1,10 @@
-import com.sun.org.apache.xerces.internal.xs.StringList;
+package inputData;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -38,6 +36,8 @@ public class PropertiesInput {
             credentials.put("project_id", prop.getProperty("project_id"));
             credentials.put("reporter_name", prop.getProperty("reporter_name"));
             credentials.put("assignee_name", prop.getProperty("assignee_name"));
+            credentials.put("max_results", prop.getProperty("max_results"));
+            credentials.put("jql", prop.getProperty("jql"));
         } catch (IOException io) {
             io.printStackTrace();
         } finally {

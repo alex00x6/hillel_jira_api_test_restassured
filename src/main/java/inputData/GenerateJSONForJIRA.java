@@ -1,16 +1,19 @@
+package inputData;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
 /**
  * Created by Storm on 08.10.2016.
  */
-public class GenerateJSON {
+public class GenerateJSONForJIRA {
 
     PropertiesInput propertiesInput = new PropertiesInput();
 
-    public String Login(){
+    public String login(){
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
         JSONObject credentials = new JSONObject();
         credentials.put("username", credentialsFromProperties.get("login"));
@@ -27,19 +30,14 @@ public class GenerateJSON {
     }
 
 
-    public String CreateIssue(){
+    public String createSampleIssue(){
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
-        JSONObject credentials = new JSONObject();
+        JSONObject issue = new JSONObject();
         JSONObject fields = new JSONObject();
         JSONObject project = new JSONObject();
         JSONObject issuetype = new JSONObject();
         JSONObject assignee = new JSONObject();
         JSONObject reporter = new JSONObject();
-
-        reporter.put("name", credentialsFromProperties.get("reporter_name"));
-        assignee.put("name", credentialsFromProperties.get("assignee_name"));
-        issuetype.put("id", credentialsFromProperties.get("issue_type"));
-        project.put("id", credentialsFromProperties.get("project_id"));
 
         fields.put("project", project);
         fields.put("summary", credentialsFromProperties.get("summary_text"));
@@ -47,7 +45,12 @@ public class GenerateJSON {
         fields.put("assignee", assignee);
         fields.put("reporter", reporter);
 
-        credentials.put("fields", fields);
+        reporter.put("name", credentialsFromProperties.get("reporter_name"));
+        assignee.put("name", credentialsFromProperties.get("assignee_name"));
+        issuetype.put("id", credentialsFromProperties.get("issue_type"));
+        project.put("id", credentialsFromProperties.get("project_id"));
+
+        issue.put("fields", fields);
 
         /*
         {
@@ -69,10 +72,10 @@ public class GenerateJSON {
         }
         */
 
-        return credentials.toJSONString();
+        return issue.toJSONString();
     }
 
-    public String AddCommentToIssue(){
+    public String addCommentToIssue(){
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
         JSONObject credentials = new JSONObject();
 
@@ -81,7 +84,7 @@ public class GenerateJSON {
         return credentials.toJSONString();
     }
 
-    public String ChangeTypeOfIssue() {
+    public String changeTypeOfIssue() {
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
         JSONObject credentials = new JSONObject();
         JSONObject fields = new JSONObject();
@@ -106,7 +109,7 @@ public class GenerateJSON {
 
 
 
-    public String ChangeSummaryOfIssue() {
+    public String changeSummaryOfIssue() {
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
         JSONObject credentials = new JSONObject();
         JSONObject update = new JSONObject();
@@ -132,7 +135,8 @@ public class GenerateJSON {
         return credentials.toJSONString();
     }
 
-    public String Search() {
+
+    public String search() {
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
         JSONObject credentials = new JSONObject();
         JSONObject fields = new JSONObject();
@@ -141,14 +145,32 @@ public class GenerateJSON {
         array.add("summary");
         array.add("key");
 
-        credentials.put("jql", "assignee = alex00x6");
+        credentials.put("jql", credentialsFromProperties.get("jql"));
         credentials.put("startAt","0");
-        credentials.put("maxResults", "15");
+        credentials.put("maxResults", credentialsFromProperties.get("max_results"));
         credentials.put("fields", array);
 
         /*
             {"jql":"project = QAAUT","maxResults":"15","startAt":"0"}
         */
+
+        System.out.println(credentials.toString());
+        return credentials.toJSONString();
+    }
+
+    public String search(String jql) {
+        HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
+        JSONObject credentials = new JSONObject();
+        JSONObject fields = new JSONObject();
+        JSONArray array = new JSONArray();
+
+        array.add("summary");
+        array.add("key");
+
+        credentials.put("jql", jql);
+        credentials.put("startAt","0");
+        credentials.put("maxResults", credentialsFromProperties.get("max_results"));
+        credentials.put("fields", array);
 
         System.out.println(credentials.toString());
         return credentials.toJSONString();

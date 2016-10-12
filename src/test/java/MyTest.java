@@ -1,14 +1,19 @@
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
+import inputData.GenerateJSONForJIRA;
+import inputData.PropertiesInput;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import apis.ApiUrls;
+import utils.RequestSender;
 
 import java.util.HashMap;
 import java.util.List;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 public class MyTest {
@@ -23,13 +28,24 @@ public class MyTest {
     private String password_wrong;
 
     PropertiesInput properties = new PropertiesInput();
-    GenerateJSON generateJSON = new GenerateJSON();
+    GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();
 
-    int Login(String login, String password){
+    public void Login(){
 
+        utils.RequestSender requestSender = new RequestSender();
+
+        requestSender.authenticate();
+
+        String sessionId = requestSender.extractResponseByPath("session.value");
+
+        assertNotNull(sessionId);
+        System.out.println(sessionId);
+
+
+        /*
         Response response = given()
                 .contentType("application/json")
-                .body(generateJSON.Login())
+                .body(generateJSON.login())
                 .post(ApiUrls.LOGIN.getUri());
 
         cookie_jsession = "JSESSIONID="+response.getCookie("JSESSIONID");
@@ -38,7 +54,9 @@ public class MyTest {
         System.out.println("HTTP Status: "+status);
         System.out.println(cookie_jsession);
 
-        return status;
+        */
+
+        //return status;
     }
 
     @BeforeTest
@@ -54,22 +72,22 @@ public class MyTest {
         password_right = content.get("password_right");
         password_wrong = content.get("password_wrong");
 
-        Login(login, password_right);
+        //login(login, password_right);
 
     }
 
 
-    @Test
-    public void LoginPositive(){
-        int status = Login(login, password_right);
-        assertTrue(status==200);
-    }
+   // @Test
+    //public void LoginPositive(){
+   //     int status = login(login, password_right);
+   //     assertTrue(status==200);
+   // }
 
-    @Test
-    public void LoginNegative(){
-        int status = Login(login, password_wrong);
-        assertFalse(status==200);
-    }
+  // @Test
+  //  public void LoginNegative(){
+  //      int status = login(login, password_wrong);
+ //       assertFalse(status==200);
+  //  }
 
     @Test
     public void CreateIssue(){
@@ -77,7 +95,7 @@ public class MyTest {
             created_issue = given()
                     .contentType("application/json")
                     .cookie(cookie_jsession)
-                    .body(generateJSON.CreateIssue())
+                    .body(generateJSON.createSampleIssue())
                     .log().all()
                     .post(ApiUrls.ISSUE.getUri())
                     .then().log().all().assertThat().statusCode(201).extract().path("key");
@@ -116,11 +134,12 @@ public class MyTest {
 
     @Test
     public void AddCommentToIssue(){
-        System.out.println("============== Add comment ===============");
+
+
         created_comment = given()
                 .contentType("application/json")
                 .cookie(cookie_jsession)
-                .body(generateJSON.AddCommentToIssue())
+                .body(generateJSON.addCommentToIssue())
                 .post("/rest/api/2/issue/"+issue_key+"/comment")
                 .then()
                 .assertThat()
@@ -149,7 +168,7 @@ public class MyTest {
         given()
                 .contentType("application/json")
                 .cookie(cookie_jsession)
-                .body(generateJSON.ChangeTypeOfIssue())
+                .body(generateJSON.changeTypeOfIssue())
                 .put(ApiUrls.ISSUE.getUri(issue_key))
                 .then()
                 .assertThat()
@@ -159,7 +178,7 @@ public class MyTest {
     @Test
     public void ChangeSummaryOfIssue(){
         given().contentType("application/json").cookie(cookie_jsession)
-                .body(generateJSON.ChangeSummaryOfIssue())
+                .body(generateJSON.changeSummaryOfIssue())
                 .put(ApiUrls.ISSUE.getUri(issue_key)).then().statusCode(204);
     }
 
@@ -168,7 +187,7 @@ public class MyTest {
         Response response = given()
                 .contentType("application/json")
                 .cookie(cookie_jsession)
-                .body(generateJSON.Search())
+                .body(generateJSON.search())
                 .log().all()
                 .post(ApiUrls.SEARCH.getUri());
 
