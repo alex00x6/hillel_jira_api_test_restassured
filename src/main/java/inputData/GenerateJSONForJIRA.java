@@ -2,13 +2,8 @@ package inputData;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.testng.annotations.Test;
-
 import java.util.HashMap;
 
-/**
- * Created by Storm on 08.10.2016.
- */
 public class GenerateJSONForJIRA {
 
     PropertiesInput propertiesInput = new PropertiesInput();
@@ -139,7 +134,6 @@ public class GenerateJSONForJIRA {
     public String search() {
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
         JSONObject credentials = new JSONObject();
-        JSONObject fields = new JSONObject();
         JSONArray array = new JSONArray();
 
         array.add("summary");
@@ -161,7 +155,6 @@ public class GenerateJSONForJIRA {
     public String search(String jql) {
         HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
         JSONObject credentials = new JSONObject();
-        JSONObject fields = new JSONObject();
         JSONArray array = new JSONArray();
 
         array.add("summary");
@@ -174,5 +167,50 @@ public class GenerateJSONForJIRA {
 
         System.out.println(credentials.toString());
         return credentials.toJSONString();
+    }
+
+    public String createForapiTestIssue(){
+        HashMap<String, String> credentialsFromProperties = propertiesInput.readProperties();
+        JSONObject issue = new JSONObject();
+        JSONObject fields = new JSONObject();
+        JSONObject project = new JSONObject();
+        JSONObject issuetype = new JSONObject();
+        JSONObject assignee = new JSONObject();
+        JSONObject reporter = new JSONObject();
+
+        fields.put("project", "TES");
+        fields.put("summary", credentialsFromProperties.get("summary_text"));
+        fields.put("issuetype", issuetype);
+        fields.put("assignee", assignee);
+        fields.put("reporter", reporter);
+
+        reporter.put("name", credentialsFromProperties.get("reporter_name"));
+        assignee.put("name", credentialsFromProperties.get("assignee_name"));
+        issuetype.put("id", credentialsFromProperties.get("issue_type"));
+        project.put("id", credentialsFromProperties.get("project_id"));
+
+        issue.put("fields", fields);
+
+        /*
+        {
+	    "fields": {
+		"project": {
+			"id": "10315"
+		},
+		"summary": "creating test issue with soap",
+		"issuetype": {
+			"id": "10004"
+		},
+		"assignee": {
+			"name": "alex00x6"
+		},
+		"reporter": {
+			"name": "alex00x6"
+		}
+	    }
+        }
+        */
+
+        return issue.toJSONString();
     }
 }

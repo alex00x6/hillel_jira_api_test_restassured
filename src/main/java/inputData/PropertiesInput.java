@@ -19,7 +19,8 @@ public class PropertiesInput {
         HashMap<String, String> credentials = new HashMap<>();
 
         try {
-            input = new FileInputStream("content.properties");
+            //input = new FileInputStream("content.properties"); //это для JIRA Hillel
+            input = new FileInputStream("contentSecure.properties"); //это для JIRA HTTPS
 
             // load a properties file
             prop.load(input);
@@ -33,9 +34,11 @@ public class PropertiesInput {
             credentials.put("login", prop.getProperty("login"));
             credentials.put("password_right", prop.getProperty("password_right"));
             credentials.put("password_wrong", prop.getProperty("password_wrong"));
+
             credentials.put("project_id", prop.getProperty("project_id"));
             credentials.put("reporter_name", prop.getProperty("reporter_name"));
             credentials.put("assignee_name", prop.getProperty("assignee_name"));
+
             credentials.put("max_results", prop.getProperty("max_results"));
             credentials.put("jql", prop.getProperty("jql"));
         } catch (IOException io) {
@@ -53,6 +56,9 @@ public class PropertiesInput {
         return credentials;
     }
 
+
+
+    //не используется
     public List<String> readListOfIssuesToDelete(){
         List<String> listOfIssuesToDelete = null;
 
