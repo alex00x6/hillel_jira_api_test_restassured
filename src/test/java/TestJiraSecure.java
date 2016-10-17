@@ -10,11 +10,11 @@ import static org.testng.AssertJUnit.assertTrue;
 
 
 public class TestJiraSecure {
-    RequestGroups requestGroups = new RequestGroups();
 
 
     @BeforeTest(groups = {"Issue", "Search", "Comment"})
     public void beforeTest(){
+        RequestGroups requestGroups = new RequestGroups();
         //проверяем, какой поток
         long id = Thread.currentThread().getId();
         System.out.println("BeforeTest. Thread id is: " + id);
@@ -121,6 +121,8 @@ public class TestJiraSecure {
         System.out.println(requestGroups.response.asString());
         assertEquals(requestGroups.response.statusCode(), 200);
         assertTrue(requestGroups.response.contentType().contains(ContentType.JSON.toString()));
+
+        requestGroups.deleteIssueSecure(issueId);
     }
 
     @Test(groups = {"Comment"})

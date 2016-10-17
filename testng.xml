@@ -1,11 +1,19 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Example test run">
-    <test name="Issue Test">
+    <test name="Issue">
         <groups>
             <run>
                 <include name = "Issue"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="TestJiraSecure" />
+        </classes>
+    </test>
+    <test name="Search">
+        <groups>
+            <run>
                 <include name = "Search"/>
-                <include name = "Comment"/>
             </run>
         </groups>
         <classes>
