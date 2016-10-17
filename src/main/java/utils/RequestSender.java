@@ -20,7 +20,6 @@ public class RequestSender {
 
 
     public void authenticate() {
-        //RestAssured.baseURI = "https://forapitest.atlassian.net";
         RestAssured.baseURI = "http://soft.it-hillel.com.ua:8080/";
 
         GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();
@@ -32,7 +31,7 @@ public class RequestSender {
         this.JSESSIONID = response.then().extract().path("session.value");
     }
 
-    public void authenticateSecured() {
+    public void authenticateSecure() {
         RestAssured.baseURI = "https://forapitest.atlassian.net";
 
         GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();

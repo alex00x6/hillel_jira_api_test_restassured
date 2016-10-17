@@ -59,6 +59,7 @@ public class PropertiesInput {
 
 
     //не используется
+    /*
     public List<String> readListOfIssuesToDelete(){
         List<String> listOfIssuesToDelete = null;
 
@@ -76,8 +77,7 @@ public class PropertiesInput {
 
 
         return listOfIssuesToDelete;
-
-
-    }
+        }
+        */
 
 }

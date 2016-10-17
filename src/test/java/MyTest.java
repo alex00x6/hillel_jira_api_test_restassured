@@ -199,6 +199,7 @@ public class MyTest {
     }
 
     //@Test
+    /*
     public void deleteIssuesByIteration(){
         List<String> issues = properties.readListOfIssuesToDelete();
         for(int i = 0; i<issues.size(); i++){
@@ -214,6 +215,7 @@ public class MyTest {
 
 
     }
+    */
 
     @AfterTest
      public void afterTest(){

@@ -1,0 +1,36 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Example test run" parallel="tests" thread-count="3">
+    <test name="Issue Test">
+        <groups>
+            <run>
+                <include name = "Issue"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="TestJiraSecure" />
+        </classes>
+    </test>
+    <test name="Search Test">
+        <groups>
+            <run>
+                <include name = "Search"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="TestJiraSecure" />
+        </classes>
+    </test>
+    <test name="Comment Test">
+        <groups>
+            <run>
+                <include name = "Comment"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="TestJiraSecure" />
+        </classes>
+    </test>
+    <!--<listeners>-->
+    <!--<listener class-name="CustomListener" />-->
+    <!--</listeners>-->
+</suite>
