@@ -1,5 +1,6 @@
 import com.jayway.restassured.http.ContentType;
 import inputData.GenerateJSONForJIRA;
+import org.junit.experimental.categories.Category;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utils.RequestGroups;
@@ -10,6 +11,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class TestJiraSecure {
     RequestGroups requestGroups = new RequestGroups();
+
 
     @BeforeTest(groups = {"Issue", "Search", "Comment"})
     public void beforeTest(){
