@@ -11,6 +11,8 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class TestJiraSecure {
 
+    //RequestGroups requestGroups = new RequestGroups();
+
 
     @BeforeTest(groups = {"Issue", "Search", "Comment"})
     public void beforeTest(){

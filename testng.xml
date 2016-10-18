@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Example test run">
+<suite name="Example test run" parallel="tests">
     <test name="Issue">
         <groups>
             <run>
@@ -14,6 +14,16 @@
         <groups>
             <run>
                 <include name = "Search"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="TestJiraSecure" />
+        </classes>
+    </test>
+    <test name="Comment">
+        <groups>
+            <run>
+                <include name = "Comment"/>
             </run>
         </groups>
         <classes>
