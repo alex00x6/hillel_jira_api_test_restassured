@@ -1,20 +1,18 @@
 package utils;
 
-import apis.ApiUrls;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 import inputData.GenerateJSONForJIRA;
 
-
 import static com.jayway.restassured.RestAssured.given;
 
 public class RequestSender {
     public static String JSESSIONID = null;
     public final static ContentType CONTENT_TYPE = ContentType.JSON;
-    public static RequestSpecification requestSpecification = null;
-    public static Response response = null;
+    public RequestSpecification requestSpecification = null;
+    public Response response = null;
     public static String ATLASSIAN_TOKEN = null;
     public static String STUDIO_TOKEN = null;
 
@@ -26,7 +24,7 @@ public class RequestSender {
         String credentials = generateJSON.login();
 
         createRequest(credentials)
-                .post(ApiUrls.LOGIN.getUri());
+                .post(apis.ApiUrls.LOGIN.getUri());
 
         this.JSESSIONID = response.then().extract().path("session.value");
     }
@@ -38,7 +36,7 @@ public class RequestSender {
         String credentials = generateJSON.login();
 
         createRequest(credentials)
-                .post(ApiUrls.LOGIN.getUri());
+                .post(apis.ApiUrls.LOGIN.getUri());
 
         this.JSESSIONID = response.then().extract().path("session.value");
         this.ATLASSIAN_TOKEN = response.then().extract().cookie("atlassian.xsrf.token");

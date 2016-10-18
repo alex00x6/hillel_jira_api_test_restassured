@@ -1,6 +1,5 @@
 import com.jayway.restassured.http.ContentType;
 import inputData.GenerateJSONForJIRA;
-import org.junit.experimental.categories.Category;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utils.RequestGroups;
@@ -38,7 +37,7 @@ public class TestJiraSecure {
         requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
 
         //проверяем
-        System.out.println(requestGroups.response.asString());
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
         assertEquals(requestGroups.response.statusCode(), 201);
         assertTrue(requestGroups.response.contentType().contains(ContentType.JSON.toString()));
 
@@ -64,7 +63,7 @@ public class TestJiraSecure {
         requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
 
         //проверяем
-        System.out.println(requestGroups.response.asString());
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
         assertEquals(requestGroups.response.statusCode(), 201);
         assertTrue(requestGroups.response.contentType().contains(ContentType.JSON.toString()));
 
@@ -84,6 +83,7 @@ public class TestJiraSecure {
 
         //создаем issue
         requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
         String issueId = requestGroups.extractResponseByPath("id");
 
         //удаляем issue и проверяем статускод
@@ -101,7 +101,7 @@ public class TestJiraSecure {
         GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
 
         requestGroups.searchSecure(generateJSONForJIRA.search());
-        System.out.println(requestGroups.response.asString());
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
 
     }
 
@@ -116,11 +116,12 @@ public class TestJiraSecure {
 
 
         requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
         String issueId = requestGroups.extractResponseByPath("id");
 
         //тест и проверка
         requestGroups.getIssueSecure(issueId);
-        System.out.println(requestGroups.response.asString());
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
         assertEquals(requestGroups.response.statusCode(), 200);
         assertTrue(requestGroups.response.contentType().contains(ContentType.JSON.toString()));
 
@@ -138,10 +139,12 @@ public class TestJiraSecure {
 
         //создаем issue, получаем его id
         requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
         String issueId = requestGroups.extractResponseByPath("id");
 
         //добавляем комент
         requestGroups.addCommentToIssueSecure(generateJSONForJIRA.addCommentToIssue(), issueId);
+//        System.out.println("RESPONSE:" + requestGroups.response.asString());
 
         //проверяем, всё ли на месте
         assertEquals(requestGroups.response.statusCode(), 201);
