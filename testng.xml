@@ -1,31 +1,6 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Example test run" parallel="tests">
+<suite name="Example test run" parallel="methods">
     <test name="Issue">
-        <groups>
-            <run>
-                <include name = "Issue"/>
-            </run>
-        </groups>
-        <classes>
-            <class name="TestJiraSecure" />
-        </classes>
-    </test>
-    <test name="Search">
-        <groups>
-            <run>
-                <include name = "Search"/>
-            </run>
-        </groups>
-        <classes>
-            <class name="TestJiraSecure" />
-        </classes>
-    </test>
-    <test name="Comment">
-        <groups>
-            <run>
-                <include name = "Comment"/>
-            </run>
-        </groups>
         <classes>
             <class name="TestJiraSecure" />
         </classes>

@@ -2,48 +2,68 @@ package utils;
 
 import apis.ApiUrls;
 
-public class RequestGroups extends RequestSender{
+public class RequestGroups {
 
-    RequestSender requestSender = new RequestSender();
+    
 
-    public void createIssue(String body){
+    public RequestSender createIssue(String body){
+        RequestSender requestSender = new RequestSender();
         requestSender.createRequest(body).post(ApiUrls.ISSUE.getUri());
+        return requestSender;
     }
 
-    public void deleteIssue(String issue){
+    public RequestSender deleteIssue(String issue){
+        RequestSender requestSender = new RequestSender();
         requestSender.createEmptyRequest().delete(ApiUrls.ISSUE.getUri(issue));
+        return requestSender;
     }
 
-    public void getIssue(String issue){
+    public RequestSender getIssue(String issue){
+        RequestSender requestSender = new RequestSender();
         requestSender.createEmptyRequest().get(ApiUrls.ISSUE.getUri(issue));
+        return requestSender;
     }
 
-    public void search(String body){
+    public RequestSender search(String body){
+        RequestSender requestSender = new RequestSender();
         requestSender.createRequest(body).post(ApiUrls.SEARCH.getUri());
+        return requestSender;
     }
 
-    public void createIssueSecure(String body){
+    public RequestSender createIssueSecure(String body){
+        RequestSender requestSender = new RequestSender();
         requestSender.createRequestSecure(body).post(ApiUrls.ISSUE.getUri());
+        return requestSender;
     }
 
-    public void deleteIssueSecure(String issue){
+    public RequestSender deleteIssueSecure(String issue){
+        RequestSender requestSender = new RequestSender();
         requestSender.createEmptyRequestSecure().delete(ApiUrls.ISSUE.getUri(issue));
+        return requestSender;
     }
 
-    public void getIssueSecure(String issue){
+    public RequestSender getIssueSecure(String issue){
+        RequestSender requestSender = new RequestSender();
         requestSender.createEmptyRequestSecure().get(ApiUrls.ISSUE.getUri(issue));
+        return requestSender;
     }
 
-    public void searchSecure(String body){
+    public RequestSender searchSecure(String body){
+        RequestSender requestSender = new RequestSender();
         requestSender.createRequestSecure(body).post(ApiUrls.SEARCH.getUri());
+        return requestSender;
     }
 
-    public void addCommentToIssue(String body, String issue){
+    public RequestSender addCommentToIssue(String body, RequestSender issue){
         //TODO - проверить, не проверялось
+        RequestSender requestSender = new RequestSender();
         requestSender.createRequest(body).post(ApiUrls.ISSUE.getUri(issue+"/comment"));
+        return requestSender;
     }
 
-    public void addCommentToIssueSecure(String body, String issue){
+    public RequestSender addCommentToIssueSecure(String body, RequestSender issue){
+        RequestSender requestSender = new RequestSender();
         requestSender.createRequestSecure(body).post(ApiUrls.ISSUE.getUri(issue+"/comment"));
+        return requestSender;
     }
 }

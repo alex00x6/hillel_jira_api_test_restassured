@@ -13,11 +13,15 @@ public class RequestSender {
     public final static ContentType CONTENT_TYPE = ContentType.JSON;
     public RequestSpecification requestSpecification = null;
     public Response response = null;
+    public String statusCode = null;
     public static String ATLASSIAN_TOKEN = null;
     public static String STUDIO_TOKEN = null;
 
+    RequestSender(){
+        authenticateSecure();
+    }
 
-    public void authenticate() {
+    private void authenticate() {
         RestAssured.baseURI = "http://soft.it-hillel.com.ua:8080/";
 
         GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();
