@@ -61,9 +61,21 @@ public class RequestGroups {
         return requestSender;
     }
 
-    public RequestSender addCommentToIssueSecure(String body, RequestSender issue){
+    public RequestSender addCommentToIssueSecure(String body, String issue){
         RequestSender requestSender = new RequestSender();
         requestSender.createRequestSecure(body).post(ApiUrls.ISSUE.getUri(issue+"/comment"));
+        return requestSender;
+    }
+
+    public RequestSender authenticateSecure(){
+        RequestSender requestSender = new RequestSender();
+        requestSender.authenticateSecure();
+        return requestSender;
+    }
+
+    public RequestSender authenticate(){
+        RequestSender requestSender = new RequestSender();
+        requestSender.authenticate();
         return requestSender;
     }
 }

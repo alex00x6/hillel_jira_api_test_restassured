@@ -13,15 +13,14 @@ public class RequestSender {
     public final static ContentType CONTENT_TYPE = ContentType.JSON;
     public RequestSpecification requestSpecification = null;
     public Response response = null;
-    public String statusCode = null;
     public static String ATLASSIAN_TOKEN = null;
     public static String STUDIO_TOKEN = null;
 
     RequestSender(){
-        authenticateSecure();
+       // authenticateSecure();
     }
 
-    private void authenticate() {
+    public void authenticate() {
         RestAssured.baseURI = "http://soft.it-hillel.com.ua:8080/";
 
         GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();
@@ -126,8 +125,6 @@ public class RequestSender {
     public String extractResponseByPath(String path){
         return response.then().extract().path(path);
     }
-
-    //public String extractResponseByPathToString(String path){ return  response.then().extract().path(path).toString();}
 
     public String extractAllResponseAsString(){
         return response.then().extract().asString();

@@ -11,98 +11,60 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class TestJiraSecure {
 
-    //RequestGroups requestGroups = new RequestGroups();
-
-/*
     @BeforeTest(groups = {"Issue", "Search", "Comment"})
     public void beforeTest(){
         RequestGroups requestGroups = new RequestGroups();
+
         //проверяем, какой поток
         long id = Thread.currentThread().getId();
         System.out.println("BeforeTest. Thread id is: " + id);
-        //логинимся
 
+        requestGroups.authenticateSecure();
     }
-    */
 
-    //
 
     @Test(groups = {"Issue"})
     public void createIssueDeleteIssue(){
-        //проверяем, какой поток
-        long id = Thread.currentThread().getId();
-        System.out.println("createIssueDeleteIssue. Thread id is: " + id);
-
         RequestGroups requestGroups = new RequestGroups();
         GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
 
+        //проверяем, какой поток (не обязательно, но просто ради интереса)
+        long id = Thread.currentThread().getId();
+        System.out.println("createIssueDeleteIssue. Thread id is: " + id);
+
         //создаем issue
-
-
         RequestSender createIssue = requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
 
         //проверяем
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
         assertEquals(createIssue.response.statusCode(), 201);
-
 
         //берем id того, что мы создали
         String issueId = createIssue.extractResponseByPath("id");
         System.out.println(issueId);
 
-        //удаляем то, что создали
+        //удаляем то, что создали, и проверяем ответ от сервера
         RequestSender deleteIssue = requestGroups.deleteIssueSecure(issueId);
         assertEquals(deleteIssue.response.statusCode(), 204);
+        assertTrue(deleteIssue.response.statusCode()==204); //странная реализация, просто проверял, работает ли
     }
 
-    @Test(groups = {"Issue"})
-    public void createIssueDeleteIssue2(){
-        //проверяем, какой поток
-        long id = Thread.currentThread().getId();
-        System.out.println("createIssueDeleteIssue. Thread id is: " + id);
-
-        RequestGroups requestGroups = new RequestGroups();
-        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
-
-        //создаем issue
-
-
-        RequestSender createIssue = requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
-
-        //проверяем
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
-        assertEquals(createIssue.response.statusCode(), 201);
-
-
-        //берем id того, что мы создали
-        String issueId = createIssue.extractResponseByPath("id");
-        System.out.println(issueId);
-
-        //удаляем то, что создали
-        RequestSender deleteIssue = requestGroups.deleteIssueSecure(issueId);
-        assertEquals(deleteIssue.response.statusCode(), 204);
-    }
-
-    /*
     @Test(groups = {"Issue"})
     public void createIssue(){
+        RequestGroups requestGroups = new RequestGroups();
+        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
+
         //проверяем, какой поток
         long id = Thread.currentThread().getId();
         System.out.println("createIssue. Thread id is: " + id);
 
-        RequestGroups requestGroups = new RequestGroups();
-        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
-
         //создаем issue
-        requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
+        RequestSender response = requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
 
         //проверяем
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
-        assertEquals(requestGroups.response.statusCode(), 201);
-        assertTrue(requestGroups.response.contentType().contains(ContentType.JSON.toString()));
+        assertEquals(response.response.statusCode(), 201);
 
         //берем id того, что мы создали и удаляем
-        String issueId = requestGroups.extractResponseByPath("id");
+        String issueId = response.extractResponseByPath("id");
         requestGroups.deleteIssueSecure(issueId);
     }
 
@@ -116,48 +78,43 @@ public class TestJiraSecure {
         System.out.println("deleteIssue. Thread id is: " + id);
 
         //создаем issue
-        requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
-        String issueId = requestGroups.extractResponseByPath("id");
+        RequestSender response = requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
+        String issueId = response.extractResponseByPath("id");
 
         //удаляем issue и проверяем статускод
-        requestGroups.deleteIssueSecure(issueId);
-        assertEquals(requestGroups.response.statusCode(), 204);
+        RequestSender delete = requestGroups.deleteIssueSecure(issueId);
+        assertEquals(delete.response.statusCode(), 204);
     }
 
-    @Test(groups = {"Search"}, priority = 3)
+    @Test(groups = {"Search"})
     public void search(){
+        RequestGroups requestGroups = new RequestGroups();
+        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
+
         //проверяем, какой поток
         long id = Thread.currentThread().getId();
         System.out.println("Search. Thread id is: " + id);
 
-        RequestGroups requestGroups = new RequestGroups();
-        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
-
-        requestGroups.searchSecure(generateJSONForJIRA.search());
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
-
+        RequestSender response = requestGroups.searchSecure(generateJSONForJIRA.search());
+        assertEquals(response.response.statusCode(), 200);
     }
 
     @Test(groups = {"Issue"})
     public void getIssue(){
+        RequestGroups requestGroups = new RequestGroups();
+        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
+
         //проверяем, какой поток
         long id = Thread.currentThread().getId();
         System.out.println("getIssue. Thread id is: " + id);
 
-        RequestGroups requestGroups = new RequestGroups();
-        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
-
-
-        requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
-        String issueId = requestGroups.extractResponseByPath("id");
+        RequestSender createIssue = requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
+        String issueId = createIssue.extractResponseByPath("id");
 
         //тест и проверка
-        requestGroups.getIssueSecure(issueId);
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
-        assertEquals(requestGroups.response.statusCode(), 200);
-        assertTrue(requestGroups.response.contentType().contains(ContentType.JSON.toString()));
+        RequestSender getIssue = requestGroups.getIssueSecure(issueId);
+        assertEquals(getIssue.response.statusCode(), 200);
+        assertTrue(getIssue.response.contentType().contains(ContentType.JSON.toString()));
 
         requestGroups.deleteIssueSecure(issueId);
     }
@@ -172,23 +129,21 @@ public class TestJiraSecure {
         System.out.println("addCommentToIssue. Thread id is: " + id);
 
         //создаем issue, получаем его id
-        requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
-        String issueId = requestGroups.extractResponseByPath("id");
+        RequestSender createIssue = requestGroups.createIssueSecure(generateJSONForJIRA.createSampleIssue());
+        String issueId = createIssue.extractResponseByPath("id");
 
         //добавляем комент
-        requestGroups.addCommentToIssueSecure(generateJSONForJIRA.addCommentToIssue(), issueId);
-//        System.out.println("RESPONSE:" + requestGroups.response.asString());
+        RequestSender addComment = requestGroups.addCommentToIssueSecure(generateJSONForJIRA.addCommentToIssue(), issueId);
 
         //проверяем, всё ли на месте
-        assertEquals(requestGroups.response.statusCode(), 201);
-        assertTrue(requestGroups.response.contentType().contains(ContentType.JSON.toString()));
+        assertEquals(addComment.response.statusCode(), 201);
+        assertTrue(addComment.response.contentType().contains(ContentType.JSON.toString()));
         //ну это прям уж совсем чтоб 100%
-        System.out.println(requestGroups.extractResponseByPath("id"));
-        System.out.println(requestGroups.extractAllResponseAsString());
+        System.out.println(addComment.extractResponseByPath("id"));
+        System.out.println(addComment.extractAllResponseAsString());
 
         //удаляем созданную issue вместе с коментом
         requestGroups.deleteIssueSecure(issueId);
     }
-*/
+
 }

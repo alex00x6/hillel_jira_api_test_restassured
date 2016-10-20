@@ -16,7 +16,7 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-public class MyTest {
+public class MyTest {/*
 
 
     private String cookie_jsession;
@@ -42,7 +42,7 @@ public class MyTest {
         System.out.println(sessionId);
 
 
-        /*
+
         Response response = given()
                 .contentType("application/json")
                 .body(generateJSON.login())
@@ -54,7 +54,7 @@ public class MyTest {
         System.out.println("HTTP Status: "+status);
         System.out.println(cookie_jsession);
 
-        */
+
 
         //return status;
     }
@@ -199,7 +199,7 @@ public class MyTest {
     }
 
     //@Test
-    /*
+
     public void deleteIssuesByIteration(){
         List<String> issues = properties.readListOfIssuesToDelete();
         for(int i = 0; i<issues.size(); i++){
@@ -215,7 +215,7 @@ public class MyTest {
 
 
     }
-    */
+
 
     @AfterTest
      public void afterTest(){
@@ -225,5 +225,7 @@ public class MyTest {
             System.out.println("created comment id: "+created_comment+" to issue: "+issue_key);
 
     }
+
+    */
 
 }

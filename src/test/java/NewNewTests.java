@@ -10,9 +10,9 @@ import static org.testng.AssertJUnit.assertTrue;
 
 
 public class NewNewTests {
+/*
 
-
-    @BeforeTest
+    //@BeforeTest
     public void beforeTest(){
         RequestGroups requestGroups = new RequestGroups();
 
@@ -53,7 +53,7 @@ public class NewNewTests {
 
         //создаем issue
         requestGroups.createIssue(generateJSONForJIRA.createSampleIssue());
-        issueId = requestGroups.extractResponseByPath("id");
+        issueId = requestGroups.extractResponseByPath("id").toString();
         System.out.println(requestGroups.extractAllResponseAsString());
 
         //удаляем
@@ -145,5 +145,5 @@ public class NewNewTests {
 
 
     }
-
+*/
 }
