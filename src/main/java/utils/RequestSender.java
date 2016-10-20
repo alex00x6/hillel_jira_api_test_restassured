@@ -9,18 +9,18 @@ import inputData.GenerateJSONForJIRA;
 import static com.jayway.restassured.RestAssured.given;
 
 public class RequestSender {
-    public static String JSESSIONID = null;
-    public final static ContentType CONTENT_TYPE = ContentType.JSON;
+    private static String JSESSIONID = null;
+    private static String ATLASSIAN_TOKEN = null;
+    private static String STUDIO_TOKEN = null;
+    private final static ContentType CONTENT_TYPE = ContentType.JSON;
     public RequestSpecification requestSpecification = null;
     public Response response = null;
-    public static String ATLASSIAN_TOKEN = null;
-    public static String STUDIO_TOKEN = null;
 
     RequestSender(){
        // authenticateSecure();
     }
 
-    public void authenticate() {
+    void authenticate() {
         RestAssured.baseURI = "http://soft.it-hillel.com.ua:8080/";
 
         GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();
@@ -29,10 +29,10 @@ public class RequestSender {
         createRequest(credentials)
                 .post(apis.ApiUrls.LOGIN.getUri());
 
-        this.JSESSIONID = response.then().extract().path("session.value");
+        JSESSIONID = response.then().extract().path("session.value");
     }
 
-    public void authenticateSecure() {
+    void authenticateSecure() {
         RestAssured.baseURI = "https://forapitest.atlassian.net";
 
         GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();
@@ -41,9 +41,9 @@ public class RequestSender {
         createRequest(credentials)
                 .post(apis.ApiUrls.LOGIN.getUri());
 
-        this.JSESSIONID = response.then().extract().path("session.value");
-        this.ATLASSIAN_TOKEN = response.then().extract().cookie("atlassian.xsrf.token");
-        this.STUDIO_TOKEN = response.then().extract().cookie("studio.crowd.tokenkey");
+        JSESSIONID = response.then().extract().path("session.value");
+        ATLASSIAN_TOKEN = response.then().extract().cookie("atlassian.xsrf.token");
+        STUDIO_TOKEN = response.then().extract().cookie("studio.crowd.tokenkey");
         System.out.println(JSESSIONID);
         System.out.println(ATLASSIAN_TOKEN);
         System.out.println(STUDIO_TOKEN);
@@ -51,7 +51,7 @@ public class RequestSender {
 
 
 
-    public RequestSender createRequest(String body) {
+    RequestSender createRequest(String body) {
         this.createRequestSpecification()
                 .addHeader("Content-Type", CONTENT_TYPE.toString())
                 .addHeader("Cookie", "JSESSIONID=" + RequestSender.JSESSIONID)
@@ -59,7 +59,7 @@ public class RequestSender {
         return this;
     }
 
-    public RequestSender createRequestSecure(String body){
+    RequestSender createRequestSecure(String body){
         this.createRequestSpecification()
                 .addHeader("Content-Type", CONTENT_TYPE.toString())
                 .addHeader("Cookie", "JSESSIONID="+RequestSender.JSESSIONID)
@@ -69,14 +69,14 @@ public class RequestSender {
         return this;
     }
 
-    public RequestSender createEmptyRequest() {
+    RequestSender createEmptyRequest() {
         this.createRequestSpecification()
                 .addHeader("Content-Type", CONTENT_TYPE.toString())
                 .addHeader("Cookie", "JSESSIONID=" + RequestSender.JSESSIONID);
         return this;
     }
 
-    public RequestSender createEmptyRequestSecure() {
+    RequestSender createEmptyRequestSecure() {
         this.createRequestSpecification()
                 .addHeader("Content-Type", CONTENT_TYPE.toString())
                 .addHeader("Cookie", "JSESSIONID="+RequestSender.JSESSIONID)
@@ -85,39 +85,39 @@ public class RequestSender {
         return this;
     }
 
-    public RequestSender createRequestSpecification() {
+     private RequestSender createRequestSpecification() {
         requestSpecification = given().
                 when();
         return this;
     }
 
     // этот метод сможет добавлять столько угодно хедеров
-    public RequestSender addHeader(String headerName, String headerValue) {
+    private RequestSender addHeader(String headerName, String headerValue) {
         requestSpecification.header(headerName, headerValue);
         return this;
     }
 
-    public RequestSender addBody(String body) {
+    private RequestSender addBody(String body) {
         requestSpecification.body(body);
         return this;
     }
 
-    public RequestSender post(String uri) {
+    RequestSender post(String uri) {
         response = requestSpecification.post(uri);
         return this;
     }
 
-    public RequestSender delete(String uri){
+    RequestSender delete(String uri){
         response = requestSpecification.delete(uri);
         return this;
     }
 
-    public RequestSender get(String uri){
+    RequestSender get(String uri){
         response = requestSpecification.get(uri);
         return this;
     }
 
-    public RequestSender put(String uri) {
+    RequestSender put(String uri) {
         response = requestSpecification.put(uri);
         return this;
     }
