@@ -13,12 +13,79 @@ public class RequestSender {
     private static String ATLASSIAN_TOKEN = null;
     private static String STUDIO_TOKEN = null;
     private final static ContentType CONTENT_TYPE = ContentType.JSON;
-    public RequestSpecification requestSpecification = null;
+    private RequestSpecification requestSpecification = null;
     public Response response = null;
 
     RequestSender(){
-       // authenticateSecure();
     }
+
+    void authenticate(){
+        GenerateJSONForJIRA generateJSON = new GenerateJSONForJIRA();
+        String credentials = generateJSON.login();
+
+        createRequest(credentials)
+                .post(apis.ApiUrls.LOGIN.getUri());
+
+
+        if (RestAssured.baseURI.contains("https://")){
+            System.out.println("Connected via HTTPS");
+
+            JSESSIONID = response.then().extract().path("session.value");
+            ATLASSIAN_TOKEN = response.then().extract().cookie("atlassian.xsrf.token");
+            STUDIO_TOKEN = response.then().extract().cookie("studio.crowd.tokenkey");
+            System.out.println(JSESSIONID);
+            System.out.println(ATLASSIAN_TOKEN);
+            System.out.println(STUDIO_TOKEN);
+        }
+        else{
+            System.out.println("Connected via HTTP");
+
+            JSESSIONID = response.then().extract().path("session.value");
+            System.out.println(JSESSIONID);
+        }
+
+    }
+
+    RequestSender createRequest(String body){
+        if (RestAssured.baseURI.contains("https://")){
+            this.createRequestSpecification()
+                    .addHeader("Content-Type", CONTENT_TYPE.toString())
+                    .addHeader("Cookie", "JSESSIONID="+RequestSender.JSESSIONID)
+                    .addHeader("Cookie", "atlassian.xsrf.token="+RequestSender.ATLASSIAN_TOKEN)
+                    .addHeader("Cookie", "studio.crowd.tokenkey="+RequestSender.STUDIO_TOKEN)
+                    .addBody(body);
+            return this;
+        }
+        else{
+            this.createRequestSpecification()
+                    .addHeader("Content-Type", CONTENT_TYPE.toString())
+                    .addHeader("Cookie", "JSESSIONID=" + RequestSender.JSESSIONID)
+                    .addBody(body);
+            return this;
+        }
+    }
+
+
+    RequestSender createEmptyRequest(){
+        if(RestAssured.baseURI.contains("https://")){
+            this.createRequestSpecification()
+                    .addHeader("Content-Type", CONTENT_TYPE.toString())
+                    .addHeader("Cookie", "JSESSIONID="+RequestSender.JSESSIONID)
+                    .addHeader("Cookie", "atlassian.xsrf.token="+RequestSender.ATLASSIAN_TOKEN)
+                    .addHeader("Cookie", "studio.crowd.tokenkey="+RequestSender.STUDIO_TOKEN);
+            return this;
+        }
+
+        else{
+            this.createRequestSpecification()
+                    .addHeader("Content-Type", CONTENT_TYPE.toString())
+                    .addHeader("Cookie", "JSESSIONID=" + RequestSender.JSESSIONID);
+            return this;
+        }
+    }
+
+
+    /*
 
     void authenticate() {
         RestAssured.baseURI = "http://soft.it-hillel.com.ua:8080/";
@@ -49,8 +116,6 @@ public class RequestSender {
         System.out.println(STUDIO_TOKEN);
     }
 
-
-
     RequestSender createRequest(String body) {
         this.createRequestSpecification()
                 .addHeader("Content-Type", CONTENT_TYPE.toString())
@@ -69,6 +134,7 @@ public class RequestSender {
         return this;
     }
 
+
     RequestSender createEmptyRequest() {
         this.createRequestSpecification()
                 .addHeader("Content-Type", CONTENT_TYPE.toString())
@@ -84,6 +150,7 @@ public class RequestSender {
                 .addHeader("Cookie", "studio.crowd.tokenkey="+RequestSender.STUDIO_TOKEN);
         return this;
     }
+    */
 
      private RequestSender createRequestSpecification() {
         requestSpecification = given().

@@ -4,7 +4,6 @@ import apis.ApiUrls;
 
 public class RequestGroups {
 
-    
 
     public RequestSender createIssue(String body){
         RequestSender requestSender = new RequestSender();
@@ -30,9 +29,23 @@ public class RequestGroups {
         return requestSender;
     }
 
+    public RequestSender addCommentToIssue(String body, String issue){
+        RequestSender requestSender = new RequestSender();
+        requestSender.createRequest(body).post(ApiUrls.ISSUE.getUri(issue+"/comment"));
+        return requestSender;
+    }
+
+    public RequestSender authenticate(){
+        RequestSender requestSender = new RequestSender();
+        requestSender.authenticate();
+        return requestSender;
+    }
+
+
+    /*
     public RequestSender createIssueSecure(String body){
         RequestSender requestSender = new RequestSender();
-        requestSender.createRequestSecure(body).post(ApiUrls.ISSUE.getUri());
+        //requestSender.createRequestSecure(body).post(ApiUrls.ISSUE.getUri());
         return requestSender;
     }
 
@@ -50,16 +63,10 @@ public class RequestGroups {
 
     public RequestSender searchSecure(String body){
         RequestSender requestSender = new RequestSender();
-        requestSender.createRequestSecure(body).post(ApiUrls.SEARCH.getUri());
+        //requestSender.createRequestSecure(body).post(ApiUrls.SEARCH.getUri());
         return requestSender;
     }
 
-    public RequestSender addCommentToIssue(String body, RequestSender issue){
-        //TODO - проверить, не проверялось
-        RequestSender requestSender = new RequestSender();
-        requestSender.createRequest(body).post(ApiUrls.ISSUE.getUri(issue+"/comment"));
-        return requestSender;
-    }
 
     public RequestSender addCommentToIssueSecure(String body, String issue){
         RequestSender requestSender = new RequestSender();
@@ -72,10 +79,6 @@ public class RequestGroups {
         requestSender.authenticateSecure();
         return requestSender;
     }
+*/
 
-    public RequestSender authenticate(){
-        RequestSender requestSender = new RequestSender();
-        requestSender.authenticate();
-        return requestSender;
-    }
 }

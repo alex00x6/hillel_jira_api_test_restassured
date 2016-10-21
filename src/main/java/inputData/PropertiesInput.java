@@ -3,12 +3,8 @@ package inputData;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 public class PropertiesInput {
 
@@ -19,8 +15,7 @@ public class PropertiesInput {
         HashMap<String, String> credentials = new HashMap<>();
 
         try {
-            //input = new FileInputStream("content.properties"); //это для JIRA Hillel
-            input = new FileInputStream("contentSecure.properties"); //это для JIRA HTTPS
+            input = new FileInputStream("content.properties");
 
             // load a properties file
             prop.load(input);
