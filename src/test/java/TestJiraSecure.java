@@ -18,7 +18,7 @@ public class TestJiraSecure {
 
         RestAssured.baseURI = "https://forapitest.atlassian.net"; //JIRA Rostislav
         //RestAssured.baseURI = "http://soft.it-hillel.com.ua:8080/"; //JIRA Hillel
-        //RestAssured.baseURI = "https://katherinetestsapi.atlassian.net"; //JIRA кати
+        //RestAssured.baseURI = "https://katherinetestsapi.atlassian.net"; //JIRA кати (там не работает ничего))
 
         //проверяем, какой поток
         long id = Thread.currentThread().getId();
@@ -121,7 +121,21 @@ public class TestJiraSecure {
         System.out.println("Search. Thread id is: " + id);
 
         RequestSender response = requestGroups.search(generateJSONForJIRA.search());
+        System.out.println(response.response.asString());
         assertEquals(response.response.statusCode(), 200);
+    }
+
+    @Test(groups = {"Search"})
+    public void searchForIssue(){
+        RequestGroups requestGroups = new RequestGroups();
+        GenerateJSONForJIRA generateJSONForJIRA = new GenerateJSONForJIRA();
+
+        //проверяем, какой поток
+        long id = Thread.currentThread().getId();
+        System.out.println("Search. Thread id is: " + id);
+
+        //TODO
+
     }
 
     @Test(groups = {"Comment"}, dependsOnMethods = {"createIssue", "deleteIssue"}, alwaysRun = true)
