@@ -134,7 +134,7 @@ public class TestJiraSecure {
         long id = Thread.currentThread().getId();
         System.out.println("Search. Thread id is: " + id);
 
-        //TODO
+        //TODO - запилить создание issue, поиск именно её, а потом её удаление
 
     }
 
